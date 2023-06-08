@@ -3,7 +3,10 @@ const Event =  require('../../models/event');
 const { transformBooking, transformEvent } = require("./merge");
 
 module.exports = {
-    bookings: () => {
+    bookings: (args, req) => {
+        if (!req.isAuth) {
+            throw new Error("Unauthenticated!");
+        }
         return Booking
         .find()
         .then(bookings => {
@@ -15,12 +18,15 @@ module.exports = {
             throw err;
         });
     },
-    bookEvent: args => {
+    bookEvent: (args, req) => {
+        if (!req.isAuth) {
+            throw new Error("Unauthenticated!");
+        }
         return Event
         .findOne({ _id: args.eventId })
         .then(fetchedEvent => {
             const newBooking = new Booking({
-                user: '647eb540c1c73161e7c8b685',
+                user: req.userId,
                 event: fetchedEvent
             });
 
@@ -35,7 +41,10 @@ module.exports = {
             });
         });
     },
-    cancelBooking: args => {
+    cancelBooking: (args, req) => {
+        if (!req.isAuth) {
+            throw new Error("Unauthenticated!");
+        }
         let deletedBooking;
         return Booking
         .findById(args.bookingId)
