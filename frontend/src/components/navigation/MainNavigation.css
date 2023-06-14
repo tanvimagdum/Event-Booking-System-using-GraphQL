@@ -1,0 +1,11 @@
+.heading {
+    font-style: italic;
+    font-weight: 500;
+    color: rgb(81, 81, 183);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.margins {
+    margin-top: 3px;
+    margin-bottom: 5px;
+}
