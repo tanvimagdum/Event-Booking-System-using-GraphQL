@@ -1,13 +1,11 @@
 import React, { useRef, useState, useContext } from "react";
-import Exam from "../components/navigation/exam";
-import Jkl from "../components/navigation/jkl";
 import AuthContext from "../context/auth-context";
 
 function AuthPage() {
 
     const [isLogin, setIsLogin] = useState(true);
-    const emailEl = useRef(null);
-    const passwordEl = useRef(null);
+    const emailRef = useRef(null);
+    const passwordRef = useRef(null);
 
     const contextType = useContext(AuthContext);
 
@@ -17,8 +15,8 @@ function AuthPage() {
 
     const submitHandler = (event) => {
         event.preventDefault();
-        const email = emailEl.current.value;
-        const password = passwordEl.current.value;
+        const email = emailRef.current.value;
+        const password = passwordRef.current.value;
 
         if(email.trim().length === 0 || password.trim().length === 0) {
             return;
@@ -86,13 +84,13 @@ function AuthPage() {
                 <div className="row mt-3 mx-auto w-50">
                     <div className="col">
                         <label htmlFor="email">E-mail</label>
-                        <input type="email" className="form-control" ref={emailEl} id="email"/>
+                        <input type="email" className="form-control" ref={emailRef} id="email"/>
                     </div>
                 </div>
                 <div className="row mt-3 mx-auto w-50">
                     <div className="col">
                         <label htmlFor="password">Password</label>
-                        <input type="password" className="form-control" ref={passwordEl} id="password"/>
+                        <input type="password" className="form-control" ref={passwordRef} id="password"/>
                     </div>
                 </div>
                 <div className="row mt-5 mx-auto w-50">
@@ -106,8 +104,6 @@ function AuthPage() {
                     </div>
                 </div>
             </div>
-            {/* <Exam/>
-            <Jkl/> */}
         </form>
     );
 }
