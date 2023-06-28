@@ -42,7 +42,6 @@ function EventsPage() {
         }
 
         const event = {title, price, date, description};
-        console.log(event);
 
         const requestBody = {
             query: `
@@ -153,7 +152,46 @@ function EventsPage() {
         setSelectedEvent(selectedEvent);
       };
 
-    const bookEventHandler = () => {}
+    const bookEventHandler = () => {
+        if (!contextType.token) {
+            setSelectedEvent(null);
+            return;
+        }
+        const requestBody = {
+            query: `
+                mutation {
+                    bookEvent(eventId: "${selectedEvent._id}") { 
+                        _id
+                        createdAt
+                        updatedAt
+                    }
+                }
+            `
+        }
+
+        const token = contextType.token;
+
+        fetch('http://localhost:8000/graphql', {
+            method: 'POST',
+            body: JSON.stringify(requestBody),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
+        })
+        .then(res => {
+            if (res.status !== 200 && res.status !== 201) {
+                throw new Error("Failed!");
+            }
+            return res.json();
+        })
+        .then(resData => {
+            hideModal();
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    }
 
     return (
         <>
@@ -180,11 +218,11 @@ function EventsPage() {
             {selectedEvent && 
             <EventModal title={selectedEvent.title} 
                         canConfirm canCancel 
-                        isOpen={selectedEvent} 
+                        isOpen={selectedEvent !== null} 
                         onHide={hideModal} 
                         onCancel={hideModal} 
                         onConfirm={bookEventHandler}
-                        confirmText="Book">
+                        confirmText={contextType.token ? 'Book' : 'OK'}>
                 <h1>{selectedEvent.title}</h1><br/>
                 <h6>
                     {new Date(selectedEvent.date).toLocaleDateString('en-US', {
