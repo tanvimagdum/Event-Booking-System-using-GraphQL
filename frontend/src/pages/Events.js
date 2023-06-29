@@ -247,7 +247,7 @@ function EventsPage() {
                 <pre style={{ fontFamily: 'Arial', fontSize: '14px', whiteSpace: 'pre-wrap' }}>{selectedEvent.description.replace(/<br>/g, '\n')}</pre>
             </EventModal>}
 
-            {contextType.token && <div className="text-center">
+            {contextType.token && <div className="text-center mt-4">
                 <h5>Share your Events now!!</h5> <br/>
                 <button className="btn btn-primary" onClick={showModal}>Create Event</button>
             </div>}

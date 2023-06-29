@@ -11,40 +11,42 @@ const userLoader = new DataLoader((userIds) => {
     return User.find({_id: {$in: userIds}});
 });
 
-const events = eventIds => {
-    return Event
-    .find({_id: {$in: eventIds}})
-    .then(events => {
+const events = async eventIds => {
+    try {
+        const events = await Event
+            .find({ _id: { $in: eventIds } });
+        events.sort((a,b) => {
+            return (
+                eventIds.indexOf(a._id.toString()) - eventIds.indexOf(b._id.toString())
+            );
+        });
         return events.map(event => {
             return transformEvent(event);
         });
-    })
-    .catch(err => {
+    } catch (err) {
         throw err;
-    });
+    }
 };
 
-const singleEvent = eventId => {
-    return eventLoader.load(eventId.toString())
-    .then(event => {
+const singleEvent = async eventId => {
+    try {
+        const event = await eventLoader.load(eventId.toString());
         return event;
-    })
-    .catch(err => {
+    } catch (err) {
         throw err;
-    });
+    }
 };
 
-const user = userId => {
-    return userLoader.load(userId.toString())
-    .then(user => {
-        return { 
+const user = async userId => {
+    try {
+        const user = await userLoader.load(userId.toString());
+        return {
             ...user._doc,
             createdEvents: events.bind(this, user._doc.createdEvents)
         };
-    })
-    .catch(err => {
+    } catch (err) {
         throw err;
-    })
+    }
 };
 
 const transformEvent = event => {

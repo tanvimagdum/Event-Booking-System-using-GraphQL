@@ -1,4 +1,5 @@
-import React from "react";
+import React from 'react';
+import {Link} from 'react-router-dom';
 import './MainNavigation.css';
 import '../../index.css';
 import AuthContext from '../../context/auth-context';
@@ -19,24 +20,24 @@ function MainNavigation() {
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
               {!context.token && (
-                <Nav.Link className="nav-link text-dark ms-2" to="/auth">
+                <Link className="nav-link text-dark ms-2" to="/auth">
                   User Authentication
-                </Nav.Link>
+                </Link>
               )}
-              <Nav.Link className="nav-link text-dark ms-2" to="/events">
+              <Link className="nav-link text-dark ms-2" to="/events">
                 Events
-              </Nav.Link>
+              </Link>
               {context.token && (
                 <>
-                  <Nav.Link className="nav-link text-dark ms-2" to="/bookings">
+                  <Link className="nav-link text-dark ms-2" to="/bookings">
                     Bookings
-                  </Nav.Link>
-                  <Nav.Link
+                  </Link>
+                  <Link
                     className="nav-link text-dark ms-2"
                     onClick={context.logout}
                   >
                     Logout
-                  </Nav.Link>
+                  </Link>
                 </>
               )}
             </Nav>

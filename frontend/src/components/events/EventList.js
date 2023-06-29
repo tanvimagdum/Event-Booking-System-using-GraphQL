@@ -17,7 +17,7 @@ const EventList = (props) => {
     });
 
     return(
-        <div className="list-group mt-5 mx-5">
+        <div className="list-group mt-5 mb-5 mx-5">
             {events}
         </div>
     );
