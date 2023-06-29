@@ -1,4 +1,5 @@
 import { React, useState, useRef, useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import EventList from '../components/events/EventList';
 import EventModal from '../components/modal/EventModal';
 import Spinner from '../components/spinner/Spinner';
@@ -6,6 +7,7 @@ import AuthContext from "../context/auth-context";
 
 function EventsPage() {
 
+    const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
     const [isEvents, setIsEvents] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -31,7 +33,7 @@ function EventsPage() {
         const title = titleRef.current.value;
         const price = +priceRef.current.value;
         const date = dateRef.current.value;
-        const description = descriptionRef.current.value;
+        const description = descriptionRef.current.value.replace(/\n/g, '<br>');
 
         if(title.trim().length === 0 ||
             price <= 0 ||
@@ -45,12 +47,12 @@ function EventsPage() {
 
         const requestBody = {
             query: `
-                mutation {
+                mutation CreateEvent($title: String!, $description: String!, $price: Float!, $date: String!) {
                     createEvent(eventInput: {
-                        title: "${title}",
-                        description: "${description}",
-                        price: ${price},
-                        date: "${date}" 
+                        title: $title,
+                        description: $description,
+                        price: $price,
+                        date: $date 
                     }) {
                         _id
                         title
@@ -59,7 +61,13 @@ function EventsPage() {
                         price
                     }
                 }
-            `
+            `,
+            variables: {
+                title: title,
+                description: description,
+                price: price,
+                date: date
+            }
         }
         
         const token = contextType.token;
@@ -155,18 +163,22 @@ function EventsPage() {
     const bookEventHandler = () => {
         if (!contextType.token) {
             setSelectedEvent(null);
+            navigate('/auth');
             return;
         }
         const requestBody = {
             query: `
-                mutation {
-                    bookEvent(eventId: "${selectedEvent._id}") { 
+                mutation BookEvent($id: ID!) {
+                    bookEvent(eventId: $id) { 
                         _id
                         createdAt
                         updatedAt
                     }
                 }
-            `
+            `,
+            variables: {
+                id: selectedEvent._id 
+            }
         }
 
         const token = contextType.token;
@@ -222,7 +234,7 @@ function EventsPage() {
                         onHide={hideModal} 
                         onCancel={hideModal} 
                         onConfirm={bookEventHandler}
-                        confirmText={contextType.token ? 'Book' : 'OK'}>
+                        confirmText={contextType.token ? 'Book' : 'Login to Book'}>
                 <h1>{selectedEvent.title}</h1><br/>
                 <h6>
                     {new Date(selectedEvent.date).toLocaleDateString('en-US', {
@@ -231,8 +243,8 @@ function EventsPage() {
                         day: 'numeric',
                     })}
                 </h6>
-                <h3>${selectedEvent.price}</h3>
-                <p>{selectedEvent.description}</p>
+                <h3>${selectedEvent.price}</h3><br/>
+                <pre style={{ fontFamily: 'Arial', fontSize: '14px', whiteSpace: 'pre-wrap' }}>{selectedEvent.description.replace(/<br>/g, '\n')}</pre>
             </EventModal>}
 
             {contextType.token && <div className="text-center">

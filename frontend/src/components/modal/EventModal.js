@@ -7,7 +7,7 @@ const EventModal = (props) => {
 
     return (
         <>
-            <Modal show={props.isOpen} onHide={props.onHide}>
+            <Modal show={props.isOpen} onHide={props.onHide} size="lg">
                 <Modal.Header className="bg-event-purple">
                     <Modal.Title>{props.title}</Modal.Title>
                 </Modal.Header>

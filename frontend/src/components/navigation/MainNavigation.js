@@ -1,35 +1,51 @@
-import { React } from "react";
-import { Link } from 'react-router-dom';
+import React from "react";
 import './MainNavigation.css';
 import '../../index.css';
 import AuthContext from '../../context/auth-context';
+import { Navbar, Nav, Container } from 'react-bootstrap';
 
 function MainNavigation() {
-
-    return (
-        <AuthContext.Consumer>
-            {(context) => (
-                <div className="container">
-                    <div className="row bg-header-purple my-5 rounded-3">
-                        <div className="col-3 my-3 mx-3">
-                            <h2 className="heading">ticketWise</h2>
-                        </div>
-                        <div className="col my-3 mx-3">
-                            {context.token && 
-                                <button className="btn btn-secondary rounded-pill float-end mx-4 my-1" onClick={context.logout}>
-                                    Logout
-                                </button>}
-                            <nav className="nav nav-tabs">
-                                {!context.token && <Link className="nav-link text-dark" to="/auth">User Authentication</Link>}
-                                <Link className="nav-link text-dark" to="/events">Events</Link>
-                                {context.token && <Link className="nav-link text-dark" to="/bookings">Bookings</Link>}
-                            </nav>  
-                        </div>
-                    </div> 
-                </div>
-            )}
-        </AuthContext.Consumer>
-    );
+  return (
+    <AuthContext.Consumer>
+      {(context) => (
+        <Navbar collapseOnSelect className="bg-header-purple" expand="lg">
+          <Container>  
+          <Navbar.Brand className="ms-2">
+            <h2 className="heading">
+              ticketWise
+            </h2>
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="me-auto">
+              {!context.token && (
+                <Nav.Link className="nav-link text-dark ms-2" to="/auth">
+                  User Authentication
+                </Nav.Link>
+              )}
+              <Nav.Link className="nav-link text-dark ms-2" to="/events">
+                Events
+              </Nav.Link>
+              {context.token && (
+                <>
+                  <Nav.Link className="nav-link text-dark ms-2" to="/bookings">
+                    Bookings
+                  </Nav.Link>
+                  <Nav.Link
+                    className="nav-link text-dark ms-2"
+                    onClick={context.logout}
+                  >
+                    Logout
+                  </Nav.Link>
+                </>
+              )}
+            </Nav>
+          </Navbar.Collapse>
+          </Container>
+        </Navbar>
+      )}
+    </AuthContext.Consumer>
+  );
 }
 
 export default MainNavigation;

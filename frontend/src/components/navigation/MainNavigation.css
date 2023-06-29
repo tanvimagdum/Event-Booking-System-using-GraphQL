@@ -5,7 +5,13 @@
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.margins {
-    margin-top: 3px;
-    margin-bottom: 5px;
+.custom-container {
+    padding-right: 0;
+    padding-left: 0;
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.margins { 
+    margin-bottom: 100px;
 }

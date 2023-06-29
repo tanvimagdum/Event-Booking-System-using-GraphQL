@@ -6,6 +6,16 @@
     background-color: rgb(162, 162, 255);
 }
 
+.btn.btn-event-purple:hover {
+    background-color: rgb(122, 122, 215);
+}
+
 .bg-header-purple {
     background-color: rgb(209, 177, 255);
+}
+
+.authstyle {
+    font-size: small;
+    font-style: italic;
+    color: gray;
 }

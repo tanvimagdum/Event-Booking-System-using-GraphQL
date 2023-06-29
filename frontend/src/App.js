@@ -24,7 +24,7 @@ function App() {
 
 
   return (
-    <div className='container'>
+    <div>
       <BrowserRouter>
       <AuthContext.Provider value={{token: token, userId: userId, login, logout}}>
         <MainNavigation/>

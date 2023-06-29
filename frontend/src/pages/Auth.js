@@ -1,5 +1,6 @@
 import React, { useRef, useState, useContext } from "react";
 import AuthContext from "../context/auth-context";
+import '../index.css';
 
 function AuthPage() {
 
@@ -24,29 +25,37 @@ function AuthPage() {
 
         let requestBody = {
             query: `
-                query {
-                    login(email: "${email}", password: "${password}") {
+                query Login($email: String!, $password: String!) {
+                    login(email: $email, password: $password) {
                         userId
                         token
                         tokenExpiration
                     }
                 }
-            `
+            `,
+            variables: {
+                email: email,
+                password: password
+            }
         };
 
         if(!isLogin) {
             requestBody = {
                 query: `
-                    mutation {
+                    mutation CreateUser($email: String!, $password: String!) {
                         createUser(userInput: {
-                            email: "${email}",
-                            password: "${password}"
+                            email: $email,
+                            password: $password
                         }) {
                             _id
                             email
                         }
                     }
-                `
+                `,
+                variables: {
+                    email: email,
+                    password: password
+                }
             }
         }
 
@@ -79,29 +88,40 @@ function AuthPage() {
     }
 
     return (
-        <form onSubmit={submitHandler}>
+        <form onSubmit={submitHandler} className="mt-5">
             <div className="container">
-                <div className="row mt-3 mx-auto w-50">
-                    <div className="col">
-                        <label htmlFor="email">E-mail</label>
-                        <input type="email" className="form-control" ref={emailRef} id="email"/>
+                <div className="row justify-content-center">
+                <div className="col-md-6">
+                    <div className="form-group">
+                    <label htmlFor="email">E-mail</label>
+                    <input type="email" className="form-control" ref={emailRef} id="email" />
                     </div>
                 </div>
-                <div className="row mt-3 mx-auto w-50">
-                    <div className="col">
-                        <label htmlFor="password">Password</label>
-                        <input type="password" className="form-control" ref={passwordRef} id="password"/>
+                </div>
+                <div className="row justify-content-center">
+                <div className="col-md-6">
+                    <div className="form-group">
+                    <label htmlFor="password">Password</label>
+                    <input type="password" className="form-control" ref={passwordRef} id="password" />
                     </div>
                 </div>
-                <div className="row mt-5 mx-auto w-50">
-                    <div className="col text-center">
+                </div>
+                <div className="row justify-content-center">
+                <div className="col-md-6">
+                    <div className="d-grid mt-3 text-center">
                         <button type="submit" className="btn btn-primary">Submit</button>
                     </div>
-                    <div className="col">
-                        <button type="button" onClick={switchModeHandler} className="btn btn-primary">
-                            Switch to {isLogin ? 'Sign Up' : 'Login'}
-                        </button>
-                    </div>
+                </div>
+                </div>
+                <div className="row justify-content-center">
+                <div className="col-md-6">
+                    <p className="text-center mt-3 authstyle">
+                    {isLogin ? "Don't have an account?" : "Already registered?"}
+                    <button type="button" onClick={switchModeHandler} className="btn btn-link">
+                        {isLogin ? 'Register' : 'Login'}
+                    </button>
+                    </p>
+                </div>
                 </div>
             </div>
         </form>
